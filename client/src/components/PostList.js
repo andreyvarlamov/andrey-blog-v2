@@ -31,7 +31,7 @@ function PostList(props) {
             <ListGroupItem>
               <p>
                 <strong>{post.title}</strong> by {post.postedBy} on{" "}
-                {new Date(post.date()).toDateString()}
+                {new Date(post.date).toDateString()}
               </p>
               <p>{post.body}</p>
               <Button color="danger" onClick={() => deletePostClick(post._id)}>

@@ -13,8 +13,6 @@ import {
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { v4 as uuid } from "uuid";
-
 import { addPost as addPostAction } from "../../redux/actions/postActions";
 
 function NewPostModal(props) {
@@ -24,7 +22,7 @@ function NewPostModal(props) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
-  const { addPost } = props;
+  const { addPost, getPosts } = props;
 
   const toggle = () => {
     setModal(prevModal => !prevModal);
@@ -33,7 +31,7 @@ function NewPostModal(props) {
   const submitForm = e => {
     e.preventDefault();
 
-    const newPost = { _id: uuid(), title, body, postedBy, date: Date.now };
+    const newPost = { title, body, postedBy };
 
     addPost(newPost);
 

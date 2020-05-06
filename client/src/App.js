@@ -1,5 +1,7 @@
 import React from "react";
 import { Container } from "reactstrap";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 import PostList from "./components/PostList";
 import AppNavbar from "./components/AppNavbar";
@@ -9,12 +11,14 @@ import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <AppNavbar />
-      <Container>
-        <PostList />
-      </Container>
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <AppNavbar />
+        <Container>
+          <PostList />
+        </Container>
+      </div>
+    </Provider>
   );
 }
 

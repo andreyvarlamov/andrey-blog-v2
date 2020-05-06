@@ -1,37 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ListGroup, ListGroupItem, Button } from "reactstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { v4 as uuid } from "uuid";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-function PostList() {
-  const postArray = [
-    {
-      _id: uuid(),
-      title: "Post 1",
-      body: "This is post 1",
-      postedBy: "Poster 1",
-      date: Date.now,
-    },
-    {
-      _id: uuid(),
-      title: "Post 2",
-      body: "This is post 2",
-      postedBy: "Poster 2",
-      date: Date.now,
-    },
-    {
-      _id: uuid(),
-      title: "Post 3",
-      body: "This is post 3",
-      postedBy: "Poster 3",
-      date: Date.now,
-    },
-  ];
+import { getPosts as getPostsAction } from "../redux/actions/postActions";
 
-  const [posts, setPosts] = useState(postArray);
+function PostList(props) {
+  const { posts } = props.post;
+
+  const { getPosts } = props;
+
+  useEffect(() => {
+    getPosts();
+    // eslint-disable-next-line
+  }, []);
 
   const deletePost = id => {
-    setPosts(posts.filter(post => post._id !== id));
+    // setPosts(posts.filter(post => post._id !== id));
   };
 
   return (
@@ -56,4 +42,18 @@ function PostList() {
   );
 }
 
-export default PostList;
+const mapStateToProps = state => {
+  return { post: state.post };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getPosts: () => dispatch(getPostsAction()),
+  };
+};
+
+PostList.propTypes = {
+  post: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostList);

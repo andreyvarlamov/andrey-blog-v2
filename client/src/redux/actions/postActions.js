@@ -6,6 +6,16 @@ export const getPosts = () => {
   };
 };
 
-export const addPost = post => {};
+export const addPost = post => {
+  return {
+    type: ADD_POST,
+    payload: post,
+  };
+};
 
-export const deletePost = id => {};
+export const deletePost = id => {
+  return {
+    type: DELETE_POST,
+    payload: id,
+  };
+};

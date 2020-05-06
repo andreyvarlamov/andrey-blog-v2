@@ -4,20 +4,23 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { getPosts as getPostsAction } from "../redux/actions/postActions";
+import {
+  getPosts as getPostsAction,
+  deletePost as deletePostAction,
+} from "../redux/actions/postActions";
 
 function PostList(props) {
   const { posts } = props.post;
 
-  const { getPosts } = props;
+  const { getPosts, deletePost } = props;
 
   useEffect(() => {
     getPosts();
     // eslint-disable-next-line
   }, []);
 
-  const deletePost = id => {
-    // setPosts(posts.filter(post => post._id !== id));
+  const deletePostClick = id => {
+    deletePost(id);
   };
 
   return (
@@ -31,7 +34,7 @@ function PostList(props) {
                 {new Date(post.date()).toDateString()}
               </p>
               <p>{post.body}</p>
-              <Button color="danger" onClick={() => deletePost(post._id)}>
+              <Button color="danger" onClick={() => deletePostClick(post._id)}>
                 Delete
               </Button>
             </ListGroupItem>
@@ -49,11 +52,14 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getPosts: () => dispatch(getPostsAction()),
+    deletePost: id => dispatch(deletePostAction(id)),
   };
 };
 
 PostList.propTypes = {
   post: PropTypes.object.isRequired,
+  getPosts: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostList);

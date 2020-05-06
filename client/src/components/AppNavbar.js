@@ -14,6 +14,8 @@ import {
   NavbarText,
 } from "reactstrap";
 
+import NewPostModal from "./modals/NewPostModal";
+
 function AppNavbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -38,7 +40,7 @@ function AppNavbar() {
           <NavbarToggler onClick={toggle} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavbarText>Test Text</NavbarText>
+              <NewPostModal />
             </Nav>
           </Collapse>
         </Container>

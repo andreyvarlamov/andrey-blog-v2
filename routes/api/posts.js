@@ -82,6 +82,16 @@ router.delete("/:id", auth, (req, res) => {
     .then(post => {
       if (post.postedBy.toString() !== req.user.id)
         return res.status(401).json({ msg: "Unauthorized to delete the post" });
+
+      // Decrease numOfPosts in the associated user
+      User.findById(post.postedBy.toString())
+        .then(user => {
+          user.numOfPosts--;
+
+          user.save();
+        })
+        .catch(err => console.log(err));
+
       post.remove().then(() => res.json({ success: true }));
     })
     .catch(err => res.status(404).json({ success: false }));

@@ -3,6 +3,7 @@ import axios from "axios";
 import { GET_POSTS, ADD_POST, DELETE_POST, POSTS_LOADING } from "./types";
 
 import { returnErrors } from "./errorActions";
+import { tokenConfig } from "./authActions";
 
 export const getPosts = () => dispatch => {
   dispatch(setPostsLoading());
@@ -20,9 +21,9 @@ export const getPosts = () => dispatch => {
     );
 };
 
-export const addPost = post => dispatch => {
+export const addPost = post => (dispatch, getState) => {
   axios
-    .post("/api/posts", post)
+    .post("/api/posts", post, tokenConfig(getState))
     .then(res => {
       dispatch({
         type: ADD_POST,
@@ -37,9 +38,9 @@ export const addPost = post => dispatch => {
     );
 };
 
-export const deletePost = id => dispatch => {
+export const deletePost = id => (dispatch, getState) => {
   axios
-    .delete("/api/posts/" + id)
+    .delete("/api/posts/" + id, tokenConfig(getState))
     .then(res => {
       dispatch({
         type: DELETE_POST,

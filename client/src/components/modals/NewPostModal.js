@@ -9,6 +9,7 @@ import {
   Label,
   Input,
   Button,
+  DropdownItem,
 } from "reactstrap";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -18,7 +19,6 @@ import { addPost as addPostAction } from "../../redux/actions/postActions";
 function NewPostModal(props) {
   const [modal, setModal] = useState(false);
 
-  const [postedBy, setPostedBy] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
@@ -31,7 +31,7 @@ function NewPostModal(props) {
   const submitForm = e => {
     e.preventDefault();
 
-    const newPost = { title, body, postedBy };
+    const newPost = { title, body };
 
     addPost(newPost);
 
@@ -40,25 +40,15 @@ function NewPostModal(props) {
 
   return (
     <Fragment>
-      <NavLink onClick={toggle} href="#">
+      <DropdownItem onClick={toggle} href="#">
         New Post
-      </NavLink>
+      </DropdownItem>
 
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>New Post</ModalHeader>
         <ModalBody>
           <Form onSubmit={submitForm}>
             <FormGroup>
-              <Label for="postedBy">Posted By</Label>
-              <Input
-                type="text"
-                name="postedBy"
-                id="postedBy"
-                placeholder="Posted By"
-                onChange={e => setPostedBy(e.target.value)}
-                value={postedBy}
-                className="mb-3"
-              ></Input>
               <Label for="title">Title</Label>
               <Input
                 type="text"

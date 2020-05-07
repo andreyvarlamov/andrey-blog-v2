@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 
+const auth = require("../../middleware/auth");
+
 // @route GET /api/posts
 // @desc Get All Posts
 // @access Public
@@ -20,7 +22,7 @@ router.get("/", (req, res) => {
 
     Post.find({ postedBy })
       .sort({ date: -1 })
-      .populate("postedBy")
+      .populate("postedBy", "-password")
       .exec((err, posts) => {
         if (err) console.log("posts error" + err);
         else res.json(posts);
@@ -28,7 +30,7 @@ router.get("/", (req, res) => {
   } else {
     Post.find()
       .sort({ date: -1 })
-      .populate("postedBy")
+      .populate("postedBy", "-password")
       .exec((err, posts) => {
         if (err) console.log(err);
         else res.json(posts);
@@ -38,13 +40,13 @@ router.get("/", (req, res) => {
 
 // @route POST /api/posts
 // @desc Add a New Post
-// @access Public
-router.post("/", (req, res) => {
+// @access Private
+router.post("/", auth, (req, res) => {
   console.log("DEBUG: POST posts");
-  const { title, body, postedBy } = req.body;
+  const { title, body } = req.body;
 
-  User.findOne({ name: postedBy }).then(user => {
-    if (!user) res.status(400).json({ msg: "No user with such name" });
+  User.findById(req.user.id).then(user => {
+    if (!user) res.status(400).json({ msg: "No user with such id" });
     else {
       user.numOfPosts++;
 
@@ -61,7 +63,11 @@ router.post("/", (req, res) => {
 
       newPost
         .save()
-        .then(item => res.json(item))
+        .then(post => {
+          const postObj = post.toObject();
+          delete postObj.postedBy.password;
+          res.json(postObj);
+        })
         .catch(err => console.log(err));
     }
   });
@@ -69,11 +75,15 @@ router.post("/", (req, res) => {
 
 // @route DELETE /api/posts/:id
 // @desc Delete a Specific Post
-// @access Public
-router.delete("/:id", (req, res) => {
+// @access Private
+router.delete("/:id", auth, (req, res) => {
   console.log("DEBUG: DELETE posts");
   Post.findById(req.params.id)
-    .then(post => post.remove().then(() => res.json({ success: true })))
+    .then(post => {
+      if (post.postedBy.toString() !== req.user.id)
+        return res.status(401).json({ msg: "Unauthorized to delete the post" });
+      post.remove().then(() => res.json({ success: true }));
+    })
     .catch(err => res.status(404).json({ success: false }));
 });
 

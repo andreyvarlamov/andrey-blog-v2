@@ -22,7 +22,7 @@ function NewPostModal(props) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
-  const { addPost, getPosts } = props;
+  const { addPost } = props;
 
   const toggle = () => {
     setModal(prevModal => !prevModal);

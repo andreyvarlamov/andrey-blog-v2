@@ -1,18 +1,39 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 // Mongoose Models
 const Post = require("../../models/Post");
+const User = require("../../models/User");
 
 // @route GET /api/posts
 // @desc Get All Posts
 // @access Public
 router.get("/", (req, res) => {
   console.log("DEBUG: GET posts");
-  Post.find()
-    .sort({ date: -1 })
-    .then(items => res.json(items))
-    .catch(err => console.log(err));
+
+  const { postedBy } = req.query;
+
+  if (postedBy) {
+    if (!mongoose.Types.ObjectId.isValid(postedBy))
+      return res.status(400).json({ msg: "Invalid ObjectID" });
+
+    Post.find({ postedBy })
+      .sort({ date: -1 })
+      .populate("postedBy")
+      .exec((err, posts) => {
+        if (err) console.log("posts error" + err);
+        else res.json(posts);
+      });
+  } else {
+    Post.find()
+      .sort({ date: -1 })
+      .populate("postedBy")
+      .exec((err, posts) => {
+        if (err) console.log(err);
+        else res.json(posts);
+      });
+  }
 });
 
 // @route POST /api/posts
@@ -22,16 +43,28 @@ router.post("/", (req, res) => {
   console.log("DEBUG: POST posts");
   const { title, body, postedBy } = req.body;
 
-  const newPost = new Post({
-    title,
-    body,
-    postedBy,
-  });
+  User.findOne({ name: postedBy }).then(user => {
+    if (!user) res.status(400).json({ msg: "No user with such name" });
+    else {
+      user.numOfPosts++;
 
-  newPost
-    .save()
-    .then(item => res.json(item))
-    .catch(err => console.log(err));
+      user
+        .save()
+        .then()
+        .catch(err => console.log(err));
+
+      const newPost = new Post({
+        title,
+        body,
+        postedBy: user,
+      });
+
+      newPost
+        .save()
+        .then(item => res.json(item))
+        .catch(err => console.log(err));
+    }
+  });
 });
 
 // @route DELETE /api/posts/:id

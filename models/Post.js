@@ -10,7 +10,8 @@ const PostSchema = new Schema({
     type: String,
   },
   postedBy: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
   date: {
     type: Date,
@@ -18,4 +19,4 @@ const PostSchema = new Schema({
   },
 });
 
-module.exports = Post = mongoose.model("post", PostSchema);
+module.exports = Post = mongoose.model("Post", PostSchema);

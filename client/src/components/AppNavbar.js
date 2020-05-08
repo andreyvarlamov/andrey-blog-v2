@@ -21,6 +21,7 @@ import RegisterModal from "./modals/RegisterModal";
 import LoginModal from "./modals/LoginModal";
 import LogoutModal from "./modals/LogoutModal";
 import MyPostsButton from "./MyPostsButton";
+import FindUserModal from "./modals/FindUserModal";
 
 function AppNavbar(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,6 +75,7 @@ function AppNavbar(props) {
           <NavbarToggler onClick={toggle} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="ml-auto" navbar>
+              <FindUserModal />
               {!isLoading ? (user ? authItems : guestItems) : null}
             </Nav>
           </Collapse>

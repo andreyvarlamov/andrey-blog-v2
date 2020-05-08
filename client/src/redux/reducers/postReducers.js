@@ -3,11 +3,14 @@ import {
   ADD_POST,
   DELETE_POST,
   POSTS_LOADING,
+  SET_FILTER,
+  REMOVE_FILTER,
 } from "../actions/types";
 
 const initialState = {
   posts: [],
   loading: false,
+  filter: null,
 };
 
 export default function (state = initialState, action) {
@@ -32,6 +35,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: true,
+      };
+    case SET_FILTER:
+      return {
+        ...state,
+        filter: action.payload,
+      };
+    case REMOVE_FILTER:
+      return {
+        ...state,
+        filter: null,
       };
     default:
       return state;

@@ -3,6 +3,8 @@ export const GET_POSTS = "GET_POSTS";
 export const ADD_POST = "ADD_POST";
 export const DELETE_POST = "DELETE_POST";
 export const POSTS_LOADING = "POSTS_LOADING";
+export const SET_FILTER = "SET_FILTER";
+export const REMOVE_FILTER = "REMOVE_FILTER";
 
 // Error action types
 export const GET_ERRORS = "GET_ERRORS";

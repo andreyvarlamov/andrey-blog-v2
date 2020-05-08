@@ -1,6 +1,13 @@
 import axios from "axios";
 
-import { GET_POSTS, ADD_POST, DELETE_POST, POSTS_LOADING } from "./types";
+import {
+  GET_POSTS,
+  ADD_POST,
+  DELETE_POST,
+  POSTS_LOADING,
+  SET_FILTER,
+  REMOVE_FILTER,
+} from "./types";
 
 import { returnErrors } from "./errorActions";
 import { tokenConfig } from "./authActions";
@@ -19,6 +26,39 @@ export const getPosts = () => dispatch => {
     .catch(err =>
       dispatch(returnErrors(err.response.data, err.response.status))
     );
+};
+
+export const getFilteredPosts = query => dispatch => {
+  dispatch(setPostsLoading());
+
+  const params = {
+    postedBy: query.id,
+  };
+
+  axios
+    .get("/api/posts", { params })
+    .then(res =>
+      dispatch({
+        type: GET_POSTS,
+        payload: res.data,
+      })
+    )
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const setFilter = filter => {
+  return {
+    type: SET_FILTER,
+    payload: filter,
+  };
+};
+
+export const removeFilter = () => {
+  return {
+    type: REMOVE_FILTER,
+  };
 };
 
 export const addPost = post => (dispatch, getState) => {

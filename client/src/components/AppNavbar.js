@@ -20,6 +20,7 @@ import NewPostModal from "./modals/NewPostModal";
 import RegisterModal from "./modals/RegisterModal";
 import LoginModal from "./modals/LoginModal";
 import LogoutModal from "./modals/LogoutModal";
+import MyPostsButton from "./MyPostsButton";
 
 function AppNavbar(props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +35,7 @@ function AppNavbar(props) {
         </DropdownToggle>
         <DropdownMenu right>
           <NewPostModal />
+          <MyPostsButton />
           <LogoutModal />
         </DropdownMenu>
       </UncontrolledDropdown>

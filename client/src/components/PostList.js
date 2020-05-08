@@ -9,7 +9,6 @@ import {
   Col,
   ListGroupItemText,
 } from "reactstrap";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -37,6 +36,7 @@ function PostList(props) {
 
   useEffect(() => {
     getPosts(filter);
+    window.scrollTo(0, 0);
     // eslint-disable-next-line
   }, [filter]);
 

@@ -1,8 +1,22 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { ListGroup, ListGroupItem, Button } from "reactstrap";
+import {
+  ListGroup,
+  ListGroupItem,
+  ListGroupItemHeading,
+  Button,
+  Container,
+  Row,
+  Col,
+  ListGroupItemText,
+} from "reactstrap";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+
+import TimeAgo from "javascript-time-ago";
+
+// Load locale-specific relative date/time formatting rules.
+import en from "javascript-time-ago/locale/en";
 
 import {
   getPosts as getPostsAction,
@@ -24,6 +38,11 @@ function PostList(props) {
     user,
   } = props;
 
+  // Add locale-specific relative date/time formatting rules.
+  TimeAgo.addLocale(en);
+
+  const timeAgo = new TimeAgo("en-US");
+
   useEffect(() => {
     if (filter) getFilteredPosts({ id: filter.id });
     else getPosts();
@@ -40,46 +59,68 @@ function PostList(props) {
 
   return (
     <Fragment>
-      <ListGroup horizontal>
-        <ListGroupItem>
-          <h3 className="mb-4">All bBlog Posts</h3>
-        </ListGroupItem>
-        <ListGroupItem>
-          <Button onClick={removeFilterClick}>&times;</Button>
-        </ListGroupItem>
-        <ListGroupItem>
-          <Button
-            onClick={() => {
-              setFilter({ id: "5eb4869176ed361b4e9368b1" });
-            }}
-          >
-            test
-          </Button>
-        </ListGroupItem>
-      </ListGroup>
+      <Container style={{ padding: 0 }} fluid={true}>
+        <Row>
+          <Col xs="auto">
+            <h3 className="mb-4">
+              {!filter ? "All bBlog" : filter.name + "'"} Posts
+            </h3>
+          </Col>
+          <Col xs="auto">
+            {filter ? (
+              <Button color="danger" onClick={removeFilterClick} size="sm">
+                &times;
+              </Button>
+            ) : null}
+          </Col>
+        </Row>
+      </Container>
 
       <ListGroup>
-        <TransitionGroup className="post-list">
-          {posts.map(post => (
-            <CSSTransition key={post._id} timeout={300} classNames="fade">
-              <ListGroupItem>
-                <p>
-                  <strong>{post.title}</strong> by {post.postedBy.name} on{" "}
-                  {new Date(post.date).toDateString()}
-                </p>
-                <p>{post.body}</p>
-                {user && user._id === post.postedBy._id ? (
-                  <Button
-                    color="danger"
-                    onClick={() => deletePostClick(post._id)}
-                  >
-                    Delete
-                  </Button>
-                ) : null}
-              </ListGroupItem>
-            </CSSTransition>
-          ))}
-        </TransitionGroup>
+        {posts.map(post => (
+          <ListGroupItem key={post._id}>
+            <ListGroupItemHeading>{post.title}</ListGroupItemHeading>
+            <ListGroupItemText
+              style={{
+                borderStyle: "solid",
+                borderWidth: "1px",
+                borderColor: "rgba(0, 0, 0, 0.125)",
+                borderRadius: "1rem",
+                padding: "0.8rem",
+              }}
+            >
+              {post.body}
+            </ListGroupItemText>
+            <ListGroupItemText style={{ marginBottom: "0" }}>
+              <em>
+                Posted {timeAgo.format(new Date(post.date))} by{" "}
+                <span
+                  onClick={() => {
+                    setFilter({
+                      id: post.postedBy._id,
+                      name: post.postedBy.name,
+                    });
+                  }}
+                  style={{ padding: "0" }}
+                  className="btn btn-link"
+                >
+                  {post.postedBy.name}
+                </span>
+              </em>
+            </ListGroupItemText>
+
+            {user && user._id === post.postedBy._id ? (
+              <ListGroupItemText>
+                <Button
+                  color="danger"
+                  onClick={() => deletePostClick(post._id)}
+                >
+                  Delete
+                </Button>
+              </ListGroupItemText>
+            ) : null}
+          </ListGroupItem>
+        ))}
       </ListGroup>
     </Fragment>
   );

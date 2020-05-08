@@ -61,6 +61,7 @@ function NewPostModal(props) {
               ></Input>
               <Label for="body">Body</Label>
               <Input
+                style={{ minHeight: "100px" }}
                 type="textarea"
                 name="body"
                 id="body"

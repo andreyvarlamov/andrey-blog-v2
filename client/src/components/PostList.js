@@ -21,7 +21,6 @@ import en from "javascript-time-ago/locale/en";
 import {
   getPosts as getPostsAction,
   deletePost as deletePostAction,
-  getFilteredPosts as getFilteredPostsAction,
   setFilter as setFilterAction,
   removeFilter as removeFilterAction,
 } from "../redux/actions/postActions";
@@ -29,14 +28,7 @@ import {
 function PostList(props) {
   const { posts, filter } = props.post;
 
-  const {
-    getPosts,
-    getFilteredPosts,
-    deletePost,
-    setFilter,
-    removeFilter,
-    user,
-  } = props;
+  const { getPosts, deletePost, setFilter, removeFilter, user } = props;
 
   // Add locale-specific relative date/time formatting rules.
   TimeAgo.addLocale(en);
@@ -44,13 +36,12 @@ function PostList(props) {
   const timeAgo = new TimeAgo("en-US");
 
   useEffect(() => {
-    if (filter) getFilteredPosts({ id: filter.id });
-    else getPosts();
+    getPosts(filter);
     // eslint-disable-next-line
   }, [filter]);
 
   const deletePostClick = id => {
-    deletePost(id);
+    deletePost(id, filter);
   };
 
   const removeFilterClick = () => {
@@ -114,6 +105,7 @@ function PostList(props) {
                 <Button
                   color="danger"
                   onClick={() => deletePostClick(post._id)}
+                  className="mt-3"
                 >
                   Delete
                 </Button>
@@ -135,9 +127,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getPosts: () => dispatch(getPostsAction()),
-    getFilteredPosts: query => dispatch(getFilteredPostsAction(query)),
-    deletePost: id => dispatch(deletePostAction(id)),
+    getPosts: filter => dispatch(getPostsAction(filter)),
+    deletePost: (id, filter) => dispatch(deletePostAction(id, filter)),
     removeFilter: () => dispatch(removeFilterAction()),
     setFilter: filter => dispatch(setFilterAction(filter)),
   };
@@ -146,7 +137,6 @@ const mapDispatchToProps = dispatch => {
 PostList.propTypes = {
   post: PropTypes.object.isRequired,
   getPosts: PropTypes.func.isRequired,
-  getFilteredPosts: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   removeFilter: PropTypes.func.isRequired,
   setFilter: PropTypes.func.isRequired,

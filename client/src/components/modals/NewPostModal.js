@@ -17,6 +17,8 @@ import PropTypes from "prop-types";
 import { addPost as addPostAction } from "../../redux/actions/postActions";
 
 function NewPostModal(props) {
+  const { filter } = props.post;
+
   const [modal, setModal] = useState(false);
 
   const [title, setTitle] = useState("");
@@ -33,7 +35,7 @@ function NewPostModal(props) {
 
     const newPost = { title, body };
 
-    addPost(newPost);
+    addPost(newPost, filter);
 
     toggle();
   };
@@ -87,12 +89,19 @@ function NewPostModal(props) {
 
 NewPostModal.propTypes = {
   addPost: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = state => {
+  return {
+    post: state.post,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    addPost: post => dispatch(addPostAction(post)),
+    addPost: (post, filter) => dispatch(addPostAction(post, filter)),
   };
 };
 
-export default connect(null, mapDispatchToProps)(NewPostModal);
+export default connect(mapStateToProps, mapDispatchToProps)(NewPostModal);

@@ -12,28 +12,15 @@ import {
 import { returnErrors } from "./errorActions";
 import { tokenConfig } from "./authActions";
 
-export const getPosts = () => dispatch => {
+export const getPosts = filter => dispatch => {
   dispatch(setPostsLoading());
 
-  axios
-    .get("/api/posts")
-    .then(res =>
-      dispatch({
-        type: GET_POSTS,
-        payload: res.data,
-      })
-    )
-    .catch(err =>
-      dispatch(returnErrors(err.response.data, err.response.status))
-    );
-};
+  let params = {};
 
-export const getFilteredPosts = query => dispatch => {
-  dispatch(setPostsLoading());
-
-  const params = {
-    postedBy: query.id,
-  };
+  if (filter)
+    params = {
+      postedBy: filter.id,
+    };
 
   axios
     .get("/api/posts", { params })
@@ -61,7 +48,7 @@ export const removeFilter = () => {
   };
 };
 
-export const addPost = post => (dispatch, getState) => {
+export const addPost = (post, filter) => (dispatch, getState) => {
   axios
     .post("/api/posts", post, tokenConfig(getState))
     .then(res => {
@@ -69,7 +56,7 @@ export const addPost = post => (dispatch, getState) => {
         type: ADD_POST,
         payload: res.data,
       });
-      dispatch(getPosts());
+      dispatch(getPosts(filter));
     })
     .catch(err =>
       dispatch(
@@ -78,7 +65,7 @@ export const addPost = post => (dispatch, getState) => {
     );
 };
 
-export const deletePost = id => (dispatch, getState) => {
+export const deletePost = (id, filter) => (dispatch, getState) => {
   axios
     .delete("/api/posts/" + id, tokenConfig(getState))
     .then(res => {
@@ -86,7 +73,7 @@ export const deletePost = id => (dispatch, getState) => {
         type: DELETE_POST,
         payload: id,
       });
-      dispatch(getPosts());
+      dispatch(getPosts(filter));
     })
     .catch(err =>
       dispatch(returnErrors(err.response.data, err.response.status))

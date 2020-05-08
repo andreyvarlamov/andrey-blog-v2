@@ -83,8 +83,8 @@ function PostList(props) {
                 padding: "0.8rem",
               }}
             >
-              {substrWord(post.body, 100)}
-              {post.body.length > 100 ? "... " : " "}
+              {substrWord(post.body, 300)}
+              {post.body.length > 300 ? "... " : " "}
               <PostDetailModal post={post} />
             </ListGroupItemText>
             <ListGroupItemText style={{ marginBottom: "0" }}>

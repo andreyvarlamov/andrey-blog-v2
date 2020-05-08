@@ -5,6 +5,7 @@ import store from "./redux/store";
 
 import PostList from "./components/PostList";
 import AppNavbar from "./components/AppNavbar";
+import AppFooter from "./components/AppFooter";
 
 import { loadUser } from "./redux/actions/authActions";
 
@@ -23,6 +24,7 @@ function App() {
         <Container>
           <PostList />
         </Container>
+        <AppFooter />
       </div>
     </Provider>
   );

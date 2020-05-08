@@ -19,37 +19,6 @@ function FindUserModal(props) {
   const { users } = props.user;
   const { getUserList, setFilter } = props;
 
-  // const fakeUsers = [
-  //   { _id: "1", name: "poo poo" },
-  //   { _id: "2", name: "poo poo" },
-  //   { _id: "3", name: "poo poo" },
-  //   { _id: "4", name: "poo poo" },
-  //   { _id: "5", name: "poo poo" },
-  //   { _id: "6", name: "poo poo" },
-  //   { _id: "7", name: "poo poo" },
-  //   { _id: "8", name: "poo poo" },
-  //   { _id: "9", name: "poo poo" },
-  //   { _id: "10", name: "poo poo" },
-  //   { _id: "11", name: "poo poo" },
-  //   { _id: "12", name: "poo poo" },
-  //   { _id: "13", name: "poo poo" },
-  //   { _id: "14", name: "poo poo" },
-  //   { _id: "15", name: "poo poo" },
-  //   { _id: "16", name: "poo poo" },
-  //   { _id: "17", name: "poo poo" },
-  //   { _id: "18", name: "poo poo" },
-  //   { _id: "19", name: "poo poo" },
-  //   { _id: "20", name: "poo poo" },
-  //   { _id: "21", name: "poo poo" },
-  //   { _id: "22", name: "poo poo" },
-  //   { _id: "23", name: "poo poo" },
-  //   { _id: "24", name: "poo poo" },
-  //   { _id: "25", name: "poo poo" },
-  //   { _id: "26", name: "poo poo" },
-  //   { _id: "27", name: "poo poo" },
-  //   { _id: "28", name: "poo poo" },
-  // ];
-
   useEffect(() => {
     getUserList();
     // eslint-disable-next-line

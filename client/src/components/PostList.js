@@ -24,6 +24,8 @@ import {
   removeFilter as removeFilterAction,
 } from "../redux/actions/postActions";
 
+import PostDetailModal from "./modals/PostDetailModal";
+
 function PostList(props) {
   const { posts, filter } = props.post;
 
@@ -80,7 +82,9 @@ function PostList(props) {
                 padding: "0.8rem",
               }}
             >
-              {post.body}
+              {post.body.replace(/^(.{100}[^\s]*).*/, "$1")}
+              {post.body.length > 100 ? "... " : " "}
+              <PostDetailModal post={post} />
             </ListGroupItemText>
             <ListGroupItemText style={{ marginBottom: "0" }}>
               <em>

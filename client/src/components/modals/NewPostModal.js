@@ -27,6 +27,8 @@ function NewPostModal(props) {
   const { addPost } = props;
 
   const toggle = () => {
+    setTitle("");
+    setBody("");
     setModal(prevModal => !prevModal);
   };
 

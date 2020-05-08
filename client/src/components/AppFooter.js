@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Container } from "reactstrap";
 
 function AppFooter(props) {
   const { loading } = props.post;
@@ -16,6 +15,7 @@ function AppFooter(props) {
               <a
                 href="https://github.com/andreyvarlamov/andrey-blog-v2"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 {"   "}
                 Github

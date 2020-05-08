@@ -10,8 +10,6 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
-  NavbarText,
 } from "reactstrap";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";

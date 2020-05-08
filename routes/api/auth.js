@@ -24,8 +24,7 @@ router.post("/", (req, res) => {
 
   User.findOne({ email })
     .then(user => {
-      // TODO change to invalid credentials
-      if (!user) return res.status(400).json({ msg: "User not found" });
+      if (!user) return res.status(400).json({ msg: "Invalid credentials" });
       if (!isValid) return res.status(400).json({ msg });
 
       bcrypt.compare(password, user.password).then(isMatch => {

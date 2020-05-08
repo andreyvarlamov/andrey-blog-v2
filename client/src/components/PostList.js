@@ -11,6 +11,7 @@ import {
 } from "reactstrap";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import substrWord from "substr-word";
 
 import TimeAgo from "javascript-time-ago";
 
@@ -82,7 +83,7 @@ function PostList(props) {
                 padding: "0.8rem",
               }}
             >
-              {post.body.replace(/^(.{100}[^\s]*).*/, "$1")}
+              {substrWord(post.body, 100)}
               {post.body.length > 100 ? "... " : " "}
               <PostDetailModal post={post} />
             </ListGroupItemText>
